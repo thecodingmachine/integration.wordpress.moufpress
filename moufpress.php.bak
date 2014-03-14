@@ -1,0 +1,63 @@
+<?php
+/**
+ * Plugin Name: Moufpress
+ * Plugin URI: http://mouf-php.com/packages/mouf/integration.wordpress.moufpress
+ * Description: Moufpress is a MVC framework for Wordpress. It is actually an adaptation of Mouf's Splash MVC framework. If you have a project developped with Splash, you can completely reuse your code, right into Wordpress with this plugin.
+ * Version: 1.0
+ * Author: David Négrier
+ * Author URI: http://mouf-php.com
+ * License: MIT
+ * Depends: WP Router
+ */
+/*
+ * This file is part of the Moufpress package.
+*
+* (c) 2014 David Negrier <david@mouf-php.com>
+*
+* For the full copyright and license information, please view the LICENSE.txt
+* file that was distributed with this source code.
+*/
+ 
+class MoufPress {
+	public function __construct() {
+		register_activation_hook( __FILE__, array($this, 'activate') );
+		register_deactivation_hook( __FILE__, array($this, 'deactivate') );
+		add_action( 'generate_rewrite_rules', array($this, 'add_rewrite_rules') );
+		add_action( 'pre_get_posts', array($this, 'pre_get_posts') );
+		add_filter( 'query_vars', array($this, 'query_vars') );
+	}
+
+	public function activate() {
+		global $wp_rewrite; $wp_rewrite->flush_rules(); // force call to generate_rewrite_rules()
+	}
+
+	public function deactivate() {
+		remove_action( 'generate_rewrite_rules', array($this, 'add_rewrite_rules') );
+		global $wp_rewrite; $wp_rewrite->flush_rules();
+	}
+
+	public function add_rewrite_rules($wp_rewrite){
+		$rules = array(
+				'moufpress/(.+?)/?$'  => 'index.php?wordpress=$matches[1]&feed=$matches[2]',
+		);
+		$wp_rewrite->rules = $rules + (array)$wp_rewrite->rules;
+	}
+
+	public function pre_get_posts( $query ) {
+		if ( ! is_admin() && $query->is_main_query() && $query->get( 'wordpress' ) ) { // check if user asked for a non-admin page and that query contains except_category_name var
+			var_dump($_SERVER);
+			var_dump($_GET);
+			exit;
+			$category = get_category_by_slug( $query->get( 'wordpress' ) ); // get the category object
+			$query->set( 'cat', '-' . $category->term_id ); // set the condition - everything except that category
+			$query->is_home = FALSE; // Tell WordPress we are not at home page
+		}
+	}
+
+	public function query_vars($public_query_vars){
+		array_push($public_query_vars, 'wordpress');
+		return $public_query_vars;
+	}
+
+}
+$moufPress = new MoufPress();
