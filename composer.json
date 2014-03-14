@@ -20,7 +20,7 @@
         "psr-4": {
             "Mouf\\Integration\\Wordpress\\Moufpress\\": "src/Mouf/Integration/Wordpress/Moufpress/"
         }
-    }
+    },
 	"require" : {
 		"php" : ">=5.3.0",
 		"composer/installers" : "*",
