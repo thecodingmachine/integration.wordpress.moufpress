@@ -97,11 +97,6 @@ class WordpressTemplate implements TemplateInterface {
 	 *
 	 */
 	public function toHtml() {
-		$title = $this->title;
-		add_filter('the_title', function() use ($title) {
-			return $title;
-		});
-		
 		$this->displayTriggered = true;
 	}
 	

@@ -31,6 +31,14 @@
 		"mouf/security.rightsservice-splash" : "~4.0"
 	},
 	"extra" : {
-		"installer-name" : "moufpress"
+		"installer-name" : "moufpress",
+		"mouf" : {
+			"install" : [{
+					"type" : "class",
+					"class" : "Mouf\\Utils\\Log\\Psr\\ErrorLogLoggerInstaller"
+				}
+			],
+			"logo" : "logo.png"
+		}
 	}
 }

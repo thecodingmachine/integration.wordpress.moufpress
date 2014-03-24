@@ -75,7 +75,7 @@ class MoufPress {
 			// remove trailing slash
 			$url = rtrim($url, "/");
 				
-			$title = 'Action '.$urlCallback->methodName.' for controller '.$urlCallback->controllerInstanceName;
+			$title = null;
 			if ($urlCallback->title !== null) {
 				$title = $urlCallback->title ;
 			}
@@ -138,15 +138,21 @@ class MoufPress {
 			}
 				
 			foreach ($httpMethods as $httpMethod) {
-				$items[] = array(
+				$item= array(
 						'path' => $url,
-						'title' => $title,
+						
 						'page_callback' => 'moufpress_execute_action',
 						// First argument passed to execute_action as the instance name, second argument is the method.
 						'page_arguments' => array($urlCallback->controllerInstanceName, $urlCallback->methodName, $parametersList, $urlCallback->parameters, $urlCallback->filters),
 						'access_callback' => TRUE,
 						//'page arguments' => array(array($httpMethod => array("instance"=>$urlCallback->controllerInstanceName, "method"=>$urlCallback->methodName, "urlParameters"=>$parametersList))),
 				);
+				
+				if ($title) {
+					$item['title'] = $title;
+				}
+				
+				$items[] = $item;
 				
 				/*if (isset($items[$url])) {
 					// Check that the URL has not been already declared.
@@ -251,12 +257,19 @@ class MoufPress {
 			/*foreach ($this->content as $element) {
 			 $element->toHtml();
 			}*/
-			
-			// FIXME: remove this when WordpressTempalte is ready!
-			exit;
-			
+						
 			$wordpressTemplate = Mouf::getWordpressTemplate();
 			if ($wordpressTemplate->isDisplayTriggered()) {
+				$title = $wordpressTemplate->getTitle();
+				if ($title) {
+					add_filter('the_title', function($previousTitle) use ($title) {
+						if (in_the_loop()) {
+							return $title;
+						}
+						return $previousTitle;
+					}, 11);
+				}
+				
 				$wordpressTemplate->getWebLibraryManager()->toHtml();
 				$wordpressTemplate->getContentBlock()->toHtml();
 			}
