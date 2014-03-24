@@ -5,6 +5,8 @@ use Mouf\Reflection\MoufReflectionClass;
 use Mouf\Mvc\Splash\Services\FilterUtils;
 use Mouf\Reflection\MoufReflectionMethod;
 use Mouf\Mvc\Splash\Services\SplashRequestContext;
+use Mouf\Mvc\Splash\Utils\SplashException;
+
 /*
  * This file is part of the Moufpress package.
 *
@@ -266,7 +268,7 @@ class MoufPress {
 		
 			// Now, let's see if we must output everything in the template or out the template.
 		
-		if ($wordpressTemplate->isDisplayTriggered()) {
+			if ($wordpressTemplate->isDisplayTriggered()) {
 				echo $result;
 			} else {
 				echo $result;

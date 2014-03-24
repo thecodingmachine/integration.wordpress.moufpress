@@ -27,7 +27,8 @@
 		"mouf/integration.wordpress.moufpress" : "~1.0",
 		"mouf/mouf" : "~2.0",
 		"mouf/mvc.splash-common" : "~4.3",
-		"mouf/html.template.templateinterface" : "~2.1"
+		"mouf/html.template.templateinterface" : "~2.1",
+		"mouf/security.rightsservice-splash" : "~4.0"
 	},
 	"extra" : {
 		"installer-name" : "moufpress"
