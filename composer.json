@@ -35,7 +35,7 @@
 		"mouf" : {
 			"install" : [{
 					"type" : "class",
-					"class" : "Mouf\\Utils\\Log\\Psr\\ErrorLogLoggerInstaller"
+					"class" : "Mouf\\Integration\\Wordpress\\Moufpress\\MoufpressInstaller"
 				}
 			],
 			"logo" : "logo.png"

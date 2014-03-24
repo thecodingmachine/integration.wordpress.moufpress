@@ -9,7 +9,6 @@ use Mouf\Html\Utils\WebLibraryManager\WebLibraryRendererInterface;
  * The WordpressWebLibraryRenderer class is the Wordpress way of adding JS ans CSS files.
  *  
  * @author David Négrier
- * @Component
  */
 class WordpressWebLibraryRenderer implements WebLibraryRendererInterface {
 	

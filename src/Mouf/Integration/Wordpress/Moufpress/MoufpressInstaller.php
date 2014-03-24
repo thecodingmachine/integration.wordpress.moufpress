@@ -26,8 +26,8 @@ class MoufpressInstaller implements PackageInstallerInterface {
 			// Let's remove the default defaultWebLibraryRenderer :)
 			$moufManager->removeComponent("defaultWebLibraryRenderer");
 		}
-		$drupalWebLibraryManager = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\WordpressWebLibraryRenderer");
-		$drupalWebLibraryManager->setName("defaultWebLibraryRenderer");
+		$wordpressWebLibraryManager = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\WordpressWebLibraryRenderer");
+		$wordpressWebLibraryManager->setName("defaultWebLibraryRenderer");
 		
 		
 		// Let's create the instances.
@@ -39,7 +39,7 @@ class MoufpressInstaller implements PackageInstallerInterface {
 			$wordpressTemplate->getSetterProperty('setContentBlock')->setValue($content_block);
 		}
 		if (!$wordpressTemplate->getSetterProperty('setWebLibraryManager')->isValueSet()) {
-			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($drupalWebLibraryManager);
+			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($wordpressWebLibraryManager);
 		}
 		
 		// Let's rewrite the MoufComponents.php file to save the component
