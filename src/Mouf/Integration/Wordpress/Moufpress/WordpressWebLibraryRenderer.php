@@ -37,16 +37,23 @@ class WordpressWebLibraryRenderer implements WebLibraryRendererInterface {
 		$this->replacedWebLibrary = $replacedWebLibrary;
 		
 		// Let's load the list of replaced web libraries.
-		$webLibraryNames = new \SplObjectStorage();
-		
-		$rootUrl = get_bloginfo('url');
-		
-		array_walk($replacedWebLibrary, function(WebLibraryInterface $webLibrary, $name) use($webLibraryNames) {
-			$webLibraryNames->attach($webLibrary, $name);
+		$this->webLibraryNames = new \SplObjectStorage();
+	}
+
+	private $initDone = false;
+	
+	private function init() {
+		if ($this->initDone) {
+			return;
+		}
+		$webLibraryNames = $this->webLibraryNames;
+		array_walk($this->replacedWebLibrary, function(WebLibraryInterface $webLibrary, $name) use($webLibraryNames) {
 			// Let's replace all the libs declared in Wordpress with our libs instead.
 			$this->registerWordpressLib($webLibrary, $name);
 		});
 		$this->webLibraryNames = $webLibraryNames;
+		
+		$this->initDone = true;
 	}
 	
 	/**
@@ -64,9 +71,9 @@ class WordpressWebLibraryRenderer implements WebLibraryRendererInterface {
 		
 		if ($name == null) {
 			$name = 'moufpress_'.self::$count;
-			$this->webLibraryNames->attach($webLibrary, $name);
 			self::$count++;
 		}
+		$this->webLibraryNames->attach($webLibrary, $name);
 		
 		$files = $webLibrary->getJsFiles();
 		
@@ -74,6 +81,8 @@ class WordpressWebLibraryRenderer implements WebLibraryRendererInterface {
 		// We must add dependencies between these files.
 		$lastDependencyName = null;
 		$cnt = 0;
+		
+		$rootUrl = get_bloginfo('url');
 		
 		foreach ($files as $file) {
 			// If this is the last:
@@ -144,6 +153,7 @@ class WordpressWebLibraryRenderer implements WebLibraryRendererInterface {
 	 * @param WebLibrary $webLibrary
 	 */
 	public function toCssHtml(WebLibraryInterface $webLibrary) {
+		$this->init();
 		$name = $this->registerWordpressLib($webLibrary);
 		wp_enqueue_style($name);
 	}
@@ -154,6 +164,7 @@ class WordpressWebLibraryRenderer implements WebLibraryRendererInterface {
 	 * @param WebLibrary $webLibrary
 	 */
 	public function toJsHtml(WebLibraryInterface $webLibrary) {
+		$this->init();
 		$name = $this->registerWordpressLib($webLibrary);
 		wp_enqueue_script($name);
 	}

@@ -37,7 +37,12 @@
 					"class" : "Mouf\\Integration\\Wordpress\\Moufpress\\MoufpressInstaller"
 				}
 			],
-			"logo" : "logo.png"
+			"logo" : "logo.png",
+			"doc" : [{
+					"title" : "Scripts and styles",
+					"url" : "doc/scripts-and-styles.md"
+				}
+			]
 		}
 	}
 }

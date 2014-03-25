@@ -15,3 +15,9 @@ You will first need to install Wordpress and Mouf side by side.
 2. [Install the Mouf PHP framework](http://mouf-php.com/packages/mouf/mouf/doc/installing_mouf.md) _in the same directory_ as Wordpress
    This means you should have the **composer.json** file of Composer in the same directory as the **wp-config.php** of Wordpress.
 3. Modify **composer.json** and add the **moufpress** module.
+
+
+
+Think about:
+- WordpressWebLibraryRenderer (and the matching between Mouf instances and the wordpress libs)
+- dependency in the wp-router module (and tested versions of Wordpress)

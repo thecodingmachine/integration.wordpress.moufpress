@@ -26,9 +26,10 @@ class MoufpressInstaller implements PackageInstallerInterface {
 			// Let's remove the default defaultWebLibraryRenderer :)
 			$moufManager->removeComponent("defaultWebLibraryRenderer");
 		}
-		$wordpressWebLibraryManager = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\WordpressWebLibraryRenderer");
-		$wordpressWebLibraryManager->setName("defaultWebLibraryRenderer");
-		
+		$wordpressWebLibraryRenderer = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\WordpressWebLibraryRenderer");
+		$wordpressWebLibraryRenderer->setName("defaultWebLibraryRenderer");
+		$jQueryLibrary = $moufManager->getInstanceDescriptor('jQueryLibrary');
+		$wordpressWebLibraryRenderer->getConstructorArgumentProperty('replacedWebLibrary')->setValue(array('jquery' => $jQueryLibrary, ));
 		
 		// Let's create the instances.
 		$wordpressTemplate = InstallUtils::getOrCreateInstance('wordpressTemplate', 'Mouf\\Integration\\Wordpress\\Moufpress\\WordpressTemplate', $moufManager);
@@ -39,7 +40,7 @@ class MoufpressInstaller implements PackageInstallerInterface {
 			$wordpressTemplate->getSetterProperty('setContentBlock')->setValue($content_block);
 		}
 		if (!$wordpressTemplate->getSetterProperty('setWebLibraryManager')->isValueSet()) {
-			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($wordpressWebLibraryManager);
+			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($moufManager->instanceExists("defaultWebLibraryManager"));
 		}
 		
 		// Let's rewrite the MoufComponents.php file to save the component
