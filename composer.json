@@ -27,7 +27,8 @@
 		"mouf/mvc.splash-common" : "~4.3",
 		"mouf/html.template.templateinterface" : "~2.1",
 		"mouf/security.rightsservice-splash" : "~4.0",
-		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0"
+		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0",
+		"mouf/javascript.jquery.jquery" : "~1.9"
 	},
 	"extra" : {
 		"mouf" : {
