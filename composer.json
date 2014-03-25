@@ -8,7 +8,7 @@
 		"mouf"
 	],
 	"homepage" : "https://mouf-php.com/packages/mouf/integration.wordpress.moufpress",
-	"type" : "wordpress-plugin",
+	"type" : "mouf-library",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "David Négrier",
@@ -23,15 +23,13 @@
 	},
 	"require" : {
 		"php" : ">=5.3.0",
-		"composer/installers" : "*",
-		"mouf/integration.wordpress.moufpress" : "~1.0",
 		"mouf/mouf" : "~2.0",
 		"mouf/mvc.splash-common" : "~4.3",
 		"mouf/html.template.templateinterface" : "~2.1",
-		"mouf/security.rightsservice-splash" : "~4.0"
+		"mouf/security.rightsservice-splash" : "~4.0",
+		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0"
 	},
 	"extra" : {
-		"installer-name" : "moufpress",
 		"mouf" : {
 			"install" : [{
 					"type" : "class",
