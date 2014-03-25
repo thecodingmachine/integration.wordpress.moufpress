@@ -10,6 +10,14 @@ In Mouf, on the other hand, scripts and styles are handled using
 
 When you use Moufpress, you can use both techniques to add JS and CSS files to your pages.
 
+**One important thing:** Web libraries are used on pages managed by Moufpress only.
+On pages managed by Wordpress (a Wordpress post, the home page, etc...) web libraries will be ignored. Therefore:
+
+- If you want to add JS/CSS on *all pages* of your Wordpress site, including the pages not managed by
+  Moufpress, you should do this *the Wordpress way*.
+- If on the other hand, you want some JS and CSS specifically on the *dynamic pages* handled by Moufpress' controllers,
+  you should declare a *web library*.
+
 Using *Web libraries* in Moufpress
 ----------------------------------
 
