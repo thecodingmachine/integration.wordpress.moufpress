@@ -48,6 +48,10 @@
 				{
 					"title" : "Widgets integration",
 					"url" : "doc/widgets.md"
+				},
+				{
+					"title" : "Authentication and authorization",
+					"url" : "doc/authentication_and_right_management.md"
 				}
 			]
 		}
