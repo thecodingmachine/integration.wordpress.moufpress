@@ -30,6 +30,9 @@
 		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0",
 		"mouf/javascript.jquery.jquery" : "~1.9"
 	},
+    "provide": {
+        "mouf/mvc.splash-implementation": "4.3.*"
+    },
 	"extra" : {
 		"mouf" : {
 			"install" : [{
