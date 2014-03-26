@@ -23,3 +23,5 @@ You will first need to install Wordpress and Mouf side by side.
 
 Think about:
 - Link to styles and scripts page.
+- Put the cache back in place
+- On Moufpress Widget, add possibility to filter stuff (based on what is done in ultimate post module)

@@ -43,6 +43,14 @@ class MoufpressInstaller implements PackageInstallerInterface {
 			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($moufManager->instanceExists("defaultWebLibraryManager"));
 		}
 		
+		// Lets replace the rightsService with Moufpress' RightsService
+		if ($moufManager->instanceExists("rightsService")) {
+			// Let's remove the default defaultWebLibraryRenderer :)
+			$moufManager->removeComponent("rightsService");
+		}
+		$wordpressRightsService = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\MoufpressRightService");
+		$wordpressRightsService->setName('rightsService');
+		
 		// Let's rewrite the MoufComponents.php file to save the component
 		$moufManager->rewriteMouf();
 	}

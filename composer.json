@@ -41,6 +41,10 @@
 			"doc" : [{
 					"title" : "Scripts and styles",
 					"url" : "doc/scripts-and-styles.md"
+				},
+				{
+					"title" : "Widgets integration",
+					"url" : "doc/widgets.md"
 				}
 			]
 		}
