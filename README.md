@@ -17,11 +17,24 @@ You will first need to install Wordpress and Mouf side by side.
    we have tested with Wordpress 3.8.1 and it works great. 
 3. [Install the Mouf PHP framework](http://mouf-php.com/packages/mouf/mouf/doc/installing_mouf.md) _in the same directory_ as Wordpress
    This means you should have the **composer.json** file of Composer in the same directory as the **wp-config.php** of Wordpress.
-4. Modify **composer.json** and add the **moufpress** module.
-
-
+4. Modify **composer.json** and add the **moufpress** module. Your **composer.json** should contain at least these lines: 
+```
+{
+	"require" : {
+		"mouf/mouf" : "~2.0",
+		"mouf/integration.wordpress.moufpress" : "~1.0",
+	},
+	"minimum-stability" : "dev"
+}
+```
+5. Run the install process in Mouf: connect to Mouf UI and run the install process for all the packages 
+   (including Moufpress install process of course)
+6. When you downloaded Moufpress, Composer automatically copied a Moufpress plugin in the `wp-content/plugins` directory of
+   Wordpress. You need to install this plugin. Connect to your Wordpress admin,  select the **Plugins > Installed plugins** 
+   menu, and click on the "Activate" button for the "Moufpress" plugin. Also, do not forget to activate
+   the **WP Router** module first. 
 
 Think about:
-- Link to styles and scripts page.
+- Put tutorial for MVC
 - Put the cache back in place
-- On Moufpress Widget, add possibility to filter stuff (based on what is done in ultimate post module)
+- Put links to sections in README.
