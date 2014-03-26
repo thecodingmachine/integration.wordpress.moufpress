@@ -59,15 +59,13 @@ class MoufpressRightService implements RightsServiceInterface {
 	 * @param mixed $scope
 	*/
 	public function redirectNotAuthorized($right, $scope = null) {
-		if ($scope) {
-			throw new MoufpressException("The 'scope' feature is not supported in Moufpress implementation of the right service.");
+		if (!$this->isAllowed($right)) {
+			$message = apply_filters('wp_router_access_denied_message', __('You are not authorized to access this page', 'moufpress'));
+			$title = apply_filters('wp_router_access_denied_title', __('Access Denied', 'moufpress'));
+			$args = apply_filters('wp_router_access_denied_args', array( 'response' => 403 ));
+			wp_die($message, $title, $args);
+			exit();
 		}
-		
-		$message = apply_filters('wp_router_access_denied_message', __('You are not authorized to access this page', 'moufpress'));
-		$title = apply_filters('wp_router_access_denied_title', __('Access Denied', 'moufpress'));
-		$args = apply_filters('wp_router_access_denied_args', array( 'response' => 403 ));
-		wp_die($message, $title, $args);
-		exit();
 	}
 }
 ?>

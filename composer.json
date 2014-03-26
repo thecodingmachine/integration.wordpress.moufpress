@@ -28,11 +28,12 @@
 		"mouf/html.template.templateinterface" : "~2.1",
 		"mouf/security.rightsservice-splash" : "~4.0",
 		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0",
-		"mouf/javascript.jquery.jquery" : "~1.9"
+		"mouf/javascript.jquery.jquery" : "~1.9",
+		"mouf/security.userservice-splash" : "~4.0"
 	},
-    "provide": {
-        "mouf/mvc.splash-implementation": "4.3.*"
-    },
+	"provide" : {
+		"mouf/mvc.splash-implementation" : "4.3.*"
+	},
 	"extra" : {
 		"mouf" : {
 			"install" : [{
@@ -44,12 +45,10 @@
 			"doc" : [{
 					"title" : "Scripts and styles",
 					"url" : "doc/scripts-and-styles.md"
-				},
-				{
+				}, {
 					"title" : "Widgets integration",
 					"url" : "doc/widgets.md"
-				},
-				{
+				}, {
 					"title" : "Authentication and authorization",
 					"url" : "doc/authentication_and_right_management.md"
 				}
