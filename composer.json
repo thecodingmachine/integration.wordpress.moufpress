@@ -29,7 +29,10 @@
 		"mouf/security.rightsservice-splash" : "~4.0",
 		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0",
 		"mouf/javascript.jquery.jquery" : "~1.9",
-		"mouf/security.userservice-splash" : "~4.0"
+		"mouf/security.userservice-splash" : "~4.0",
+		"mouf/utils.cache.apc-cache" : "~2.1",
+		"mouf/utils.cache.file-cache" : "~2.1",
+		"mouf/utils.constants.secret" : "~1.0"
 	},
 	"provide" : {
 		"mouf/mvc.splash-implementation" : "4.3.*"
@@ -43,6 +46,9 @@
 			],
 			"logo" : "logo.png",
 			"doc" : [{
+					"title" : "Writing controllers and views",
+					"url" : "doc/mvc.md"
+				},{
 					"title" : "Scripts and styles",
 					"url" : "doc/scripts-and-styles.md"
 				}, {

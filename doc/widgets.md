@@ -27,3 +27,10 @@ Or, you can decide to use one of the html element already developed for you. The
 [Evolugrid](http://mouf-php.com/packages/mouf/html.widgets.evolugrid/README.md) to display an ajax datagrid,
 [BCE](http://mouf-php.com/packages/mouf/mvc.bce/readme.md) to display a form with direct mapping in database,
 a Twig template using the Twig block, etc... There are many possibilities if you take the time to scan the existing Mouf packages!
+
+What next?
+----------
+
+Learn more about:
+
+- [authentication and authorization](doc/authentication_and_right_management.md)

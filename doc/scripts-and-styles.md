@@ -49,3 +49,11 @@ This is a map where the key is the name of the script as declared in Wordpress a
 `WebLibrary` that will replace it.
 
 By default, you will notice that Moufpress is replacing the `jquery` script with its own version of the script.
+
+What next?
+----------
+
+Learn more about:
+
+- [widgets integration](doc/widgets.md)
+- [authentication and authorization](doc/authentication_and_right_management.md)

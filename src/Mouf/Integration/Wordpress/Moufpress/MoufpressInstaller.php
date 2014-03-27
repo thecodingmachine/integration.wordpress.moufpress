@@ -59,6 +59,44 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		$wordpressRightsService = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\MoufpressRightService");
 		$wordpressRightsService->setName('rightsService');
 		
+		// Let's create the instances.
+		$moufpress = InstallUtils::getOrCreateInstance('moufpress', 'Mouf\\Integration\\Wordpress\\Moufpress\\Moufpress', $moufManager);
+		
+		// Let's bind instances together.
+		if (!$moufpress->getConstructorArgumentProperty('wordpressTemplate')->isValueSet()) {
+			$moufpress->getConstructorArgumentProperty('wordpressTemplate')->setValue($wordpressTemplate);
+		}
+		
+		if (!$moufpress->getConstructorArgumentProperty("cacheService")->isValueSet()) {
+			if (!$moufManager->instanceExists("splashCacheApc")) {
+				$splashCacheApc = $moufManager->createInstance("Mouf\\Utils\\Cache\\ApcCache");
+				$splashCacheApc->setName("splashCacheApc");
+		
+				if (!$moufManager->instanceExists("splashCacheFile")) {
+					$splashCacheFile = $moufManager->createInstance("Mouf\\Utils\\Cache\\FileCache");
+					$splashCacheFile->setName("splashCacheFile");
+					$splashCacheFile->getProperty("cacheDirectory")->setValue("splashCache/");
+				} else {
+					$splashCacheFile = $moufManager->getInstanceDescriptor("splashCacheApc");
+				}
+		
+				if (isset($constants['SECRET'])) {
+					$splashCacheFile->getProperty('prefix')->setValue('SECRET')->setOrigin('config');
+				}
+		
+				$splashCacheApc->getProperty("fallback")->setValue($splashCacheFile);
+					
+			} else {
+				$splashCacheApc = $moufManager->getInstanceDescriptor("splashCacheApc");
+			}
+			
+			if (isset($constants['SECRET'])) {
+				$splashCacheApc->getProperty('prefix')->setValue('SECRET')->setOrigin('config');
+			}
+		
+			$moufpress->getConstructorArgumentProperty("cacheService")->setValue($splashCacheApc);
+		}
+		
 		// Let's rewrite the MoufComponents.php file to save the component
 		$moufManager->rewriteMouf();
 	}
