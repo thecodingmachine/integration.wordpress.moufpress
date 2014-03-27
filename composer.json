@@ -48,7 +48,7 @@
 			"doc" : [{
 					"title" : "Writing controllers and views",
 					"url" : "doc/mvc.md"
-				},{
+				}, {
 					"title" : "Scripts and styles",
 					"url" : "doc/scripts-and-styles.md"
 				}, {

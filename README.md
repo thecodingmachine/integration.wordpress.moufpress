@@ -1,6 +1,8 @@
 MoufPress: a MVC framework for Wordpress based on Mouf
 ======================================================
 
+![Logo](doc/images/moufpress.png)
+
 Why should I care?
 ------------------
 
@@ -34,26 +36,26 @@ Installation
 You will first need to install Wordpress and Mouf side by side.
 
 1. Start by installing [Wordpress](http://wordpress.org/) as you would normally do.
-2. Install the [WP-Router plugin](https://wordpress.org/plugins/wp-router/).
+2. Install the [WP-Router plugin](https://wordpress.org/plugins/wp-router/).  
    Note: even if the plugin page stats this plugin works up to version 3.4 of Wordpress,
    we have tested with Wordpress 3.8.1 and it works great. 
 3. [Install the Mouf PHP framework](http://mouf-php.com/packages/mouf/mouf/doc/installing_mouf.md) _in the same directory_ as Wordpress
    This means you should have the **composer.json** file of Composer in the same directory as the **wp-config.php** of Wordpress.
 4. Modify **composer.json** and add the **moufpress** module. Your **composer.json** should contain at least these lines: 
-```
-{
-	"autoload" : {
-		"psr-0" : {
-			"MyApp" : "src/"
+
+		{
+			"autoload" : {
+				"psr-0" : {
+					"MyApp" : "src/"
+				}
+			},
+			"require" : {
+				"mouf/mouf" : "~2.0",
+				"mouf/integration.wordpress.moufpress" : "~1.0",
+			},
+			"minimum-stability" : "dev"
 		}
-	},
-	"require" : {
-		"mouf/mouf" : "~2.0",
-		"mouf/integration.wordpress.moufpress" : "~1.0",
-	},
-	"minimum-stability" : "dev"
-}
-```
+
    Do not forget to customize your vendor name (the `MyApp` part of the autoloader section).
 5. Create the empty `src/` directory at the root of your project.
 6. Run the install process in Mouf: connect to Mouf UI and run the install process for all the packages 
@@ -75,5 +77,3 @@ Or if you already know Splash, you can directly jump to another part of this doc
 - [authentication and authorization](doc/authentication_and_right_management.md)
 - [web library (JS/CSS)](doc/scripts-and-styles.md)
 
-TODO:
-- Put the cache back in place
