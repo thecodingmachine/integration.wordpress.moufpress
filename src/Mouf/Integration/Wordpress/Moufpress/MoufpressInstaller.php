@@ -40,7 +40,7 @@ class MoufpressInstaller implements PackageInstallerInterface {
 			$wordpressTemplate->getSetterProperty('setContentBlock')->setValue($content_block);
 		}
 		if (!$wordpressTemplate->getSetterProperty('setWebLibraryManager')->isValueSet()) {
-			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($moufManager->instanceExists("defaultWebLibraryManager"));
+			$wordpressTemplate->getSetterProperty('setWebLibraryManager')->setValue($moufManager->getInstanceDescriptor("defaultWebLibraryManager"));
 		}
 		
 		// Lets replace the rightsService with Moufpress' UserService
