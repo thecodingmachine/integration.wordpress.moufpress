@@ -14,6 +14,40 @@ Therefore, calling `$wordpressTemplate->toHtml()` will trigger the display of th
 If you do not call this method, the Wordpress theme will not be displayed and anything outputed will be directly 
 sent to the browser. This is a fairly easy way to do some Ajax since you won't be polluted by the Wordpress theme at all.
 
+Managing the title
+------------------
+As with any Splash templates, you can modify the title of the template using the `setTitle`.
+For instance, calling `$wordpressTemplate->setTitle("My page")` will set the title in both the Wordpress template and the &lt;title&gt; tag.
+
+Specific to Moufpress: you can also use the `@Title` annotation in your controller to set the title of the page. For instance:
+
+```php
+/**
+ * @URL mytest
+ * @Title My page
+ */
+public function index() {
+	$this->content->addFile(ROOT_PATH.'src/views/myview.php', $this);
+	$this->template->toHtml();
+}
+```
+
+Troubleshooting: if the title is not displayed correctly in the &lt;title&gt; tag (especially, if you see the "WP Router Placeholder Page" text instead of your title,
+it is likely that you are using the "All-in-one SEO pack" plugin. This module rewrites the title in a way that is not compatible with Moufpress. A simple
+workaround to disable this feature of the "All-in-one SEO pack" plugin in Moufpress is to edit your `header.php` file in your theme and add a space in the title tag.
+
+For instance, write:
+
+```php
+<title ><?php wp_title( '|', true, 'right' ); ?></title>
+```
+
+instead of 
+
+```php
+<title><?php wp_title( '|', true, 'right' ); ?></title>
+```
+
 What next?
 ----------
 

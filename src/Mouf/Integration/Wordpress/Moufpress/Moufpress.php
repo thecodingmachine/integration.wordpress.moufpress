@@ -138,15 +138,18 @@ class Moufpress {
 			$urlParts = explode("/", $trimmedUrl);
 			$urlPartsNew = array();
 			$parametersList = array();
+                        // We will store the number of parameters for a URL
+                        $nbParam = 0;
 				
 			for ($i=0; $i<count($urlParts); $i++) {
 				$urlPart = $urlParts[$i];
 				if (strpos($urlPart, "{") === 0 && strpos($urlPart, "}") === strlen($urlPart)-1) {
+                                        $nbParam+=1;
 					// Parameterized URL element
 					$varName = substr($urlPart, 1, strlen($urlPart)-2);
 						
 					$parametersList[$varName] = $i;
-					$urlPartsNew[] = '(.*?)';
+					$urlPartsNew[] = '([^/]*?)';
 				} else {
 					$urlPartsNew[] = $urlPart;
 				}
@@ -202,14 +205,16 @@ class Moufpress {
 						// First argument passed to execute_action as the instance name, second argument is the method.
 						'page_arguments' => array($urlCallback->controllerInstanceName, $urlCallback->methodName, $parametersList, $urlCallback->parameters, $urlCallback->filters),
 						'access_callback' => TRUE,
+                                                 // We store the number of parameters for an item
+                                                'nbParam' => $nbParam
 						//'page arguments' => array(array($httpMethod => array("instance"=>$urlCallback->controllerInstanceName, "method"=>$urlCallback->methodName, "urlParameters"=>$parametersList))),
 				);
 				
 				if ($title) {
 					$item['title'] = $title;
 				}
-				
-				$items[] = $item;
+
+                                $items[] = $item;
 				
 				/*if (isset($items[$url])) {
 					// Check that the URL has not been already declared.
@@ -260,7 +265,13 @@ class Moufpress {
 			}
 				
 		}
-		
+                
+                /* 
+                 * We sort the tableOfURLS with the one with the fewer parameters coming first
+                 */
+                usort($items, function(array $a, array $b) {
+                    return $a['nbParam'] - $b['nbParam'];
+                });
 		return $items;
 	}
 	
@@ -342,6 +353,9 @@ class Moufpress {
 							return $title;
 						}
 						return $previousTitle;
+					}, 11);
+                                        add_filter('wp_title', function() use ($title) {
+                                            return $title;
 					}, 11);
 				}
 				
