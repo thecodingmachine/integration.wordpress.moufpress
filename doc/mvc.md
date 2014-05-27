@@ -53,6 +53,8 @@ What next?
 
 Learn more about:
 
-- [web library (JS/CSS)](doc/scripts-and-styles.md)
-- [widgets integration](doc/widgets.md)
-- [authentication and authorization](doc/authentication_and_right_management.md)
+<a href="scripts-and-styles.md" class="btn btn-primary">Web library (JS/CSS) &gt;</a>
+
+<a href="widgets.md" class="btn">Widgets integration &gt;</a>
+
+<a href="authentication_and_right_management.md" class="btn">Authentication and authorization &gt;</a>
