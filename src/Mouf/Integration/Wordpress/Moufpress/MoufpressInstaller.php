@@ -33,7 +33,7 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		
 		// Let's create the instances.
 		$wordpressTemplate = InstallUtils::getOrCreateInstance('wordpressTemplate', 'Mouf\\Integration\\Wordpress\\Moufpress\\WordpressTemplate', $moufManager);
-		$content_block = InstallUtils::getOrCreateInstance('content.block', 'Mouf\\Html\\HtmlElement\\HtmlBlock', $moufManager);
+		$content_block = InstallUtils::getOrCreateInstance('block.content', 'Mouf\\Html\\HtmlElement\\HtmlBlock', $moufManager);
 		
 		// Let's bind instances together.
 		if (!$wordpressTemplate->getSetterProperty('setContentBlock')->isValueSet()) {

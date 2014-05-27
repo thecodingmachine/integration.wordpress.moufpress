@@ -196,7 +196,7 @@ class Moufpress {
 					$httpMethods[strtoupper($httpMethod)] = 'moufpress_execute_action';
 				}
 			}
-			
+                        
 			foreach ($httpMethods as $httpMethod) {
 				$item= array(
 						'path' => $url,
@@ -343,13 +343,25 @@ class Moufpress {
 			/*foreach ($this->content as $element) {
 			 $element->toHtml();
 			}*/
-						
+                        
+                        
 			$wordpressTemplate = $this->wordpressTemplate;
 			if ($wordpressTemplate->isDisplayTriggered()) {
 				$title = $wordpressTemplate->getTitle();
 				if ($title) {
-					add_filter('the_title', function($previousTitle) use ($title) {
-						if (in_the_loop()) {
+                                        $posts = get_posts(array(
+                                                'post_type' => \WP_Router_Page::POST_TYPE,
+                                                'post_status' => 'publish',
+                                                'posts_per_page' => 1,
+                                        ));
+                                        if ( $posts ) {
+                                            $page_post_id = $posts[0]->ID;
+                                        } else {
+                                            $page_post_id = null;
+                                        }
+                                    
+					add_filter('the_title', function($previousTitle, $postId = null) use ($title, $page_post_id) {
+						if (in_the_loop() || $page_post_id == $postId) {
 							return $title;
 						}
 						return $previousTitle;
