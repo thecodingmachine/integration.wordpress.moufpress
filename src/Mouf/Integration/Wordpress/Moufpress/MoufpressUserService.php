@@ -14,7 +14,7 @@ class MoufpressUserService implements UserServiceInterface {
 	 *
 	 * @param string $user
 	 * @param string $password
-	 * @return boolean.
+	 * @return boolean
 	 */
 	public function login($user, $password) {
 		$creds = array();
@@ -39,7 +39,7 @@ class MoufpressUserService implements UserServiceInterface {
 	 * @param string $login
 	*/
 	public function loginWithoutPassword($login) {
-		$user = get_user_by('login', $username );
+		$user = get_user_by('login', $login );
 		
 		if ( !is_wp_error( $user ) || $user == null ) {
 			throw new MoufpressException("Unable to find user whose login is ".$login);

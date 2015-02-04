@@ -18,6 +18,7 @@ use Mouf\Mvc\Splash\Services\SplashRequestContext;
 use Mouf\Mvc\Splash\Utils\SplashException;
 use Mouf\Utils\Cache\CacheInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Mouf\Mvc\Splash\HtmlResponse;
 
 
 /**
@@ -116,7 +117,6 @@ class Moufpress {
 	 * @return array<array>
 	 */
 	public function getRoutesWithoutCache() {
-		$allConstants = get_defined_constants();
 		$urlsList = SplashUtils::getSplashUrlManager()->getUrlsList(false);
 		
 		$items = array();
@@ -160,35 +160,6 @@ class Moufpress {
 			$url = '^'.implode('/', $urlPartsNew).'$';
 			///////////////// End URL analysis ////////////////////
 				
-			//getItemMenuSettings from annotation
-			$annotations = MoufManager::getMoufManager()->getInstanceDescriptor($urlCallback->controllerInstanceName)->getClassDescriptor()->getMethod($urlCallback->methodName)->getAnnotations("DrupalMenuSettings");
-			$settings = array();
-			if ($annotations){
-				if (count($annotations) > 1){
-					throw new SplashException('Action '.$urlCallback->methodName.' for controller '.$urlCallback->controllerInstanceName.' should have at most 1 "DrupalMenuSettings" annotation');
-				}
-				else{
-					$settings = json_decode($annotations[0]);
-				}
-			}
-			
-			// Recover function filters
-			
-			// Note: rights management is managed directly by the RequireRights annotation.
-			// We could uncomment and work on the code below to have the rights management managed by wp-router instead.
-			/*
-			$phpDocComment = new MoufPhpDocComment($urlCallback->fullComment);
-			$requiresRightArray = $phpDocComment->getAnnotations('RequiresRight');
-			$accessArguments = array();
-			if(count($requiresRightArray)) {
-				foreach ($requiresRightArray as $requiresRight) {
-					/* @var $requiresRight RequiresRight * /
-					$accessArguments[] = $requiresRight->getName();
-				}
-			} else {
-				$accessArguments[] = 'access content';
-			}*/
-				
 			$httpMethods = $urlCallback->httpMethods;
 			if (empty($httpMethods)) {
 				$httpMethods["default"] = 'moufpress_execute_action';
@@ -214,55 +185,9 @@ class Moufpress {
 				if ($title) {
 					$item['title'] = $title;
 				}
-
-                                $items[] = $item;
 				
-				/*if (isset($items[$url])) {
-					// Check that the URL has not been already declared.
-					if (isset($items[$url]['page_callback'][$httpMethod])) {
-						$msg = "Error! The URL '".$url."' ";
-						if ($httpMethod != "default") {
-							$msg .= "for HTTP method '".$httpMethod."' ";
-						}
-						$msg .= " has been declared twice: once for instance '".$urlCallback->controllerInstanceName."' and method '".$urlCallback->methodName."' ";
-						$oldCallback = $items[$url]['page arguments'][0][$httpMethod];
-						$msg .= " and once for instance '".$oldCallback['instance']."' and method '".$oldCallback['method']."'. The instance  '".$oldCallback['instance']."', method '".$oldCallback['method']."' will be ignored.";
-						//throw new MoufException($msg);
-						
-						add_settings_error(
-							'splash_error',
-							esc_attr('settings_updated'),
-							$msg,
-							'updated'
-						);
-						
-						add_action('admin_notices', function() {
-							settings_errors( 'splash_error' );
-						});
-					}
-						
-					$items[$url]['page_callback'][$httpMethod] = array("instance"=>$urlCallback->controllerInstanceName, "method"=>$urlCallback->methodName, "urlParameters"=>$parametersList);
-				} else {
-					$items[$url] = array(
-							'path' => $url,
-							'title' => $title,
-							'query_vars' => array(
-									'instance' => 1,
-									'method' => 1,
-							),
-							'page_callback' => array($this, 'execute_action'),
-							'page_arguments' => array('sample_argument'),
-							'access_callback' => TRUE,
-							'page arguments' => array(array($httpMethod => array("instance"=>$urlCallback->controllerInstanceName, "method"=>$urlCallback->methodName, "urlParameters"=>$parametersList))),
-					);
-						
-					foreach ($settings as $key => $value){
-						if ($key == "type"){
-							$value = $allConstants[$value];
-						}
-						$items[$url][$key] = $value;
-					}
-				}*/
+				$items[] = $item;
+				
 			}
 				
 		}
@@ -282,10 +207,6 @@ class Moufpress {
 		$controller = MoufManager::getMoufManager()->get($instanceName);
 		
 		if (method_exists($controller,$method)) {
-			$refClass = new MoufReflectionClass(get_class($controller));
-			// FIXME: the analysis should be performed during getDrupalMenus for performance.
-			$refMethod = $refClass->getMethod($method); // $refMethod is an instance of MoufReflectionMethod
-		
 			$requestParts = array();
 			if ($urlParameters) {
 				$pathinfo = isset( $_SERVER['PATH_INFO'] ) ? $_SERVER['PATH_INFO'] : '';
@@ -311,13 +232,7 @@ class Moufpress {
 			$args = array();
 			foreach ($parameters as $paramFetcher) {
 				/* @var $param SplashParameterFetcherInterface */
-				try {
-					$args[] = $paramFetcher->fetchValue($context);
-				} catch (SplashValidationException $e) {
-		
-					$e->setPrependedMessage(SplashUtils::translate("validate.error.while.validating.parameter", $paramFetcher->getName()));
-					throw $e;
-				}
+				$args[] = $paramFetcher->fetchValue($context);
 			}
 		
 			// Handle action__GET or action__POST method (for legacy code).
@@ -343,27 +258,25 @@ class Moufpress {
 			
 			$wordpressTemplate = $this->wordpressTemplate;
 			
+			ob_start();
 			if ($response instanceof HtmlResponse) {
 				$htmlElement = $response->getHtmlElement();
 				if ($htmlElement instanceof WordpressTemplate) {
-					ob_start();
 					$htmlElement->toHtml();
 					$htmlElement->getWebLibraryManager()->toHtml();
 					$htmlElement->getContentBlock()->toHtml();
-					$result = ob_get_clean();
 				} else {
 					$response->send();
 				}
 			}else{
-				ob_start();
 				$response->sendHeaders();
 				$response->sendContent();
 				if ($wordpressTemplate->isDisplayTriggered()) {
 					$wordpressTemplate->getWebLibraryManager()->toHtml();
 					$wordpressTemplate->getContentBlock()->toHtml();
 				}
-				$result = ob_get_clean();
 			}
+			$result = ob_get_clean();
 			
 			if ($wordpressTemplate->isDisplayTriggered()) {
 				$title = $wordpressTemplate->getTitle();
