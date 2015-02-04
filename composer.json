@@ -37,6 +37,8 @@
 	"provide" : {
 		"mouf/mvc.splash-implementation" : "4.3.*"
 	},
+	"minimum-stability" : "dev",
+	"prefer-stable" : true,
 	"extra" : {
 		"mouf" : {
 			"install" : [{
