@@ -35,7 +35,7 @@
 		"mouf/utils.constants.secret" : "~1.0"
 	},
 	"provide" : {
-		"mouf/mvc.splash-implementation" : "4.3.*"
+		"mouf/mvc.splash-implementation" : "5.*"
 	},
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
