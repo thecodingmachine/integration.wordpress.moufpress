@@ -24,7 +24,7 @@
 	"require" : {
 		"php" : ">=5.3.0",
 		"mouf/mouf" : "~2.0",
-		"mouf/mvc.splash-common" : "~4.3",
+		"mouf/mvc.splash-common" : "~5.0",
 		"mouf/html.template.templateinterface" : "~2.1",
 		"mouf/security.rightsservice-splash" : "~4.0",
 		"mouf/integration.wordpress.moufpress-wordpressplugin" : "~1.0",
