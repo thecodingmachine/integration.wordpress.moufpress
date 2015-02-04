@@ -17,6 +17,7 @@ use Mouf\Reflection\MoufReflectionMethod;
 use Mouf\Mvc\Splash\Services\SplashRequestContext;
 use Mouf\Mvc\Splash\Utils\SplashException;
 use Mouf\Utils\Cache\CacheInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -276,6 +277,8 @@ class Moufpress {
 	}
 	
 	public function executeAction($instanceName, $method, $urlParameters, $parameters, $filters) {
+		$request = Request::createFromGlobals();
+		
 		$controller = MoufManager::getMoufManager()->get($instanceName);
 		
 		if (method_exists($controller,$method)) {
@@ -301,7 +304,7 @@ class Moufpress {
 			}
 			
 			
-			$context = new SplashRequestContext();
+			$context = new SplashRequestContext($request);
 			$context->setUrlParameters(array_map(function($itemPos) use ($requestParts) { return $requestParts[$itemPos]; }, $urlParameters));
 		
 			/****/
@@ -332,49 +335,63 @@ class Moufpress {
 			//call_user_func_array(array($this,$method), AdminBag::getInstance()->argsArray);
 			//$result = call_user_func_array(array($this,$method), $argsArray);
 		
-			ob_start();
-			try {
-				echo call_user_func_array(array($controller,$method), $args);
-			} catch (Exception $e) {
-				ob_end_clean();
-				// Rethrow and keep stack trace.
-				throw $e;
-			}
-			/*foreach ($this->content as $element) {
-			 $element->toHtml();
-			}*/
-                        
-                        
+			$response = SplashUtils::buildControllerResponse(
+					function() use ($controller, $method, $args){
+						return call_user_func_array(array($controller,$method), $args);
+					}
+			);
+			
 			$wordpressTemplate = $this->wordpressTemplate;
+			
+			if ($response instanceof HtmlResponse) {
+				$htmlElement = $response->getHtmlElement();
+				if ($htmlElement instanceof WordpressTemplate) {
+					ob_start();
+					$htmlElement->toHtml();
+					$htmlElement->getWebLibraryManager()->toHtml();
+					$htmlElement->getContentBlock()->toHtml();
+					$result = ob_get_clean();
+				} else {
+					$response->send();
+				}
+			}else{
+				ob_start();
+				$response->sendHeaders();
+				$response->sendContent();
+				if ($wordpressTemplate->isDisplayTriggered()) {
+					$wordpressTemplate->getWebLibraryManager()->toHtml();
+					$wordpressTemplate->getContentBlock()->toHtml();
+				}
+				$result = ob_get_clean();
+			}
+			
 			if ($wordpressTemplate->isDisplayTriggered()) {
 				$title = $wordpressTemplate->getTitle();
 				if ($title) {
-                                        $posts = get_posts(array(
-                                                'post_type' => \WP_Router_Page::POST_TYPE,
-                                                'post_status' => 'publish',
-                                                'posts_per_page' => 1,
-                                        ));
-                                        if ( $posts ) {
-                                            $page_post_id = $posts[0]->ID;
-                                        } else {
-                                            $page_post_id = null;
-                                        }
-                                    
+					$posts = get_posts(array(
+							'post_type' => \WP_Router_Page::POST_TYPE,
+							'post_status' => 'publish',
+							'posts_per_page' => 1,
+					));
+					if ( $posts ) {
+						$page_post_id = $posts[0]->ID;
+					} else {
+						$page_post_id = null;
+					}
+					 
 					add_filter('the_title', function($previousTitle, $postId = null) use ($title, $page_post_id) {
 						if (in_the_loop() || $page_post_id == $postId) {
 							return $title;
 						}
 						return $previousTitle;
 					}, 11);
-                                        add_filter('wp_title', function() use ($title) {
-                                            return $title;
+					add_filter('wp_title', function() use ($title) {
+						return $title;
 					}, 11);
 				}
-				
-				$wordpressTemplate->getWebLibraryManager()->toHtml();
-				$wordpressTemplate->getContentBlock()->toHtml();
+					
 			}
-			$result = ob_get_clean();
+			
 		
 			foreach ($filters as $filter) {
 				$filter->afterAction();

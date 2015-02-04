@@ -51,19 +51,20 @@ You will first need to install Wordpress and Mouf side by side.
 			},
 			"require" : {
 				"mouf/mouf" : "~2.0",
-				"mouf/integration.wordpress.moufpress" : "~1.0",
+				"mouf/integration.wordpress.moufpress" : "~2.0",
 			},
-			"minimum-stability" : "dev"
+			"minimum-stability" : "dev",
+			"prefer-stable": true
 		}
 
    Do not forget to customize your vendor name (the `MyApp` part of the autoloader section).
 5. Create the empty `src/` directory at the root of your project.
 6. Run the install process in Mouf: connect to Mouf UI and run the install process for all the packages 
    (including Moufpress install process of course)
-7. When you downloaded Moufpress, Composer automatically copied a Moufpress plugin in the `wp-content/plugins` directory of
+7. If it has not been done already, activate the **WP Router** module, as well as URL rewriting in settings >> permalinks menu (the only option that CANNOT be set is the default one : `http://localhost/wordtest/?p=123`).
+8. When you downloaded Moufpress, Composer automatically copied a Moufpress plugin in the `wp-content/plugins` directory of
    Wordpress. You need to install this plugin. Connect to your Wordpress admin,  select the **Plugins > Installed plugins** 
-   menu, and click on the "Activate" button for the "Moufpress" plugin. Also, do not forget to activate
-   the **WP Router** module first if you haven't already done it.
+   menu, and click on the "Activate" button for the "Moufpress" plugin.
 
 
 Getting started
