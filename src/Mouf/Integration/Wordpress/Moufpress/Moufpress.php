@@ -330,11 +330,11 @@ class Moufpress {
 			for ($i=count($filters)-1; $i>=0; $i--) {
 				$filters[$i]->beforeAction();
 			}
-		
-			// Ok, now, let's store the parameters.
-			//call_user_func_array(array($this,$method), AdminBag::getInstance()->argsArray);
-			//$result = call_user_func_array(array($this,$method), $argsArray);
-		
+
+			header_remove('Expires');
+			header_remove('Cache-Control');
+			header_remove('Pragma');
+			
 			$response = SplashUtils::buildControllerResponse(
 					function() use ($controller, $method, $args){
 						return call_user_func_array(array($controller,$method), $args);
