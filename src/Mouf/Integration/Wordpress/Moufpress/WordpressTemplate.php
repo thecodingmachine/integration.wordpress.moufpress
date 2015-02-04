@@ -2,7 +2,6 @@
 namespace Mouf\Integration\Wordpress\Moufpress;
 
 use Mouf\Html\Utils\WebLibraryManager\WebLibraryManager;
-
 use Mouf\Html\HtmlElement\HtmlBlock;
 use Mouf\Html\Template\TemplateInterface;
 
@@ -27,7 +26,7 @@ class WordpressTemplate implements TemplateInterface {
 	/**
 	 * The weblibrarymanager is in charge of handing JS files.
 	 *
-	 * @var WebLibraryManagerInterface
+	 * @var WebLibraryManager
 	 */
 	private $webLibraryManager;
 	
