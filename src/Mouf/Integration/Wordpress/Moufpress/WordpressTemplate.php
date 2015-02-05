@@ -4,6 +4,7 @@ namespace Mouf\Integration\Wordpress\Moufpress;
 use Mouf\Html\Utils\WebLibraryManager\WebLibraryManager;
 use Mouf\Html\HtmlElement\HtmlBlock;
 use Mouf\Html\Template\TemplateInterface;
+use Mouf\Html\Template\BaseTemplate\BaseTemplate;
 
 
 /**
@@ -13,9 +14,7 @@ use Mouf\Html\Template\TemplateInterface;
  * 
  * @author David Négrier
  */
-class WordpressTemplate implements TemplateInterface {
-	
-	protected $title;
+class WordpressTemplate extends BaseTemplate {
 	
 	/**
 	 * True if the toHtml method has been called, false otherwise.
@@ -23,22 +22,10 @@ class WordpressTemplate implements TemplateInterface {
 	 */
 	protected $displayTriggered = false;
 	
-	/**
-	 * The weblibrarymanager is in charge of handing JS files.
-	 *
-	 * @var WebLibraryManager
-	 */
-	private $webLibraryManager;
-	
-	/**
-	 * 
-	 * @var HtmlBlock
-	 */
-	private $contentBlock;
 	    
 	public function getContentBlock() 
 	{
-	  return $this->contentBlock;
+	  return $this->content;
 	}
 	
 	/**
@@ -47,44 +34,9 @@ class WordpressTemplate implements TemplateInterface {
 	 * 
 	 * @param HtmlBlock $value
 	 */
-	public function setContentBlock($value) 
+	public function setContentBlock($value)
 	{
-	  $this->contentBlock = $value;
-	}
-	
-	/**
-	 * Sets the title for the page.
-	 * 
-	 * @return TemplateInterface
-	 */
-	public function setTitle($title) {
-		$this->title = $title;
-		return $this;
-	}
-	
-	public function getTitle() {
-		return $this->title;
-	}
-	
-	/**
-	 * Returns the WebLibraryManager object that can be used to add JS/CSS files to this template.
-	 *
-	 * @return WebLibraryManager
-	*/
-	public function getWebLibraryManager() {
-		return $this->webLibraryManager;
-	}
-	
-	/**
-	 * Sets the web library manager for this template.
-	 *
-	 * @Property
-	 * @param WebLibraryManager $webLibraryManager
-	 * @return BaseTemplate
-	 */
-	public function setWebLibraryManager(WebLibraryManager $webLibraryManager) {
-		$this->webLibraryManager = $webLibraryManager;
-		return $this;
+	  $this->content = $value;
 	}
 	
 	/**
@@ -97,6 +49,7 @@ class WordpressTemplate implements TemplateInterface {
 	 */
 	public function toHtml() {
 		$this->displayTriggered = true;
+		$this->getDefaultRenderer()->setTemplateRenderer($this->getTemplateRenderer());
 	}
 	
 	/**

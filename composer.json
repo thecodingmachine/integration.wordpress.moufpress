@@ -32,7 +32,8 @@
 		"mouf/security.userservice-splash" : "~4.0",
 		"mouf/utils.cache.apc-cache" : "~2.1",
 		"mouf/utils.cache.file-cache" : "~2.1",
-		"mouf/utils.constants.secret" : "~1.0"
+		"mouf/utils.constants.secret" : "~1.0",
+		"mouf/html.utils.weblibrarymanager": "~3.0"
 	},
 	"provide" : {
 		"mouf/mvc.splash-implementation" : "5.*"
