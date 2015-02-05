@@ -10,6 +10,7 @@ namespace Mouf\Integration\Wordpress\Moufpress;
 use Mouf\Installer\PackageInstallerInterface;
 use Mouf\MoufManager;
 use Mouf\Actions\InstallUtils;
+use Mouf\Html\Renderer\ChainableRendererInterface;
 
 /**
  * The installer for Moufpress.
@@ -21,16 +22,6 @@ class MoufpressInstaller implements PackageInstallerInterface {
 	 * @see \Mouf\Installer\PackageInstallerInterface::install()
 	 */
 	public static function install(MoufManager $moufManager) {
-		// Provide a defaultWebLibraryRenderer adapted to Drupal
-		if ($moufManager->instanceExists("defaultWebLibraryRenderer")) {
-			// Let's remove the default defaultWebLibraryRenderer :)
-			$moufManager->removeComponent("defaultWebLibraryRenderer");
-		}
-		$wordpressWebLibraryRenderer = $moufManager->createInstance("Mouf\\Integration\\Wordpress\\Moufpress\\WordpressWebLibraryRenderer");
-		$wordpressWebLibraryRenderer->setName("defaultWebLibraryRenderer");
-		$jQueryLibrary = $moufManager->getInstanceDescriptor('jQueryLibrary');
-		$wordpressWebLibraryRenderer->getConstructorArgumentProperty('replacedWebLibrary')->setValue(array('jquery' => $jQueryLibrary, ));
-		
 		// Let's create the instances.
 		$wordpressTemplate = InstallUtils::getOrCreateInstance('wordpressTemplate', 'Mouf\\Integration\\Wordpress\\Moufpress\\WordpressTemplate', $moufManager);
 		$content_block = InstallUtils::getOrCreateInstance('block.content', 'Mouf\\Html\\HtmlElement\\HtmlBlock', $moufManager);
@@ -61,6 +52,10 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		
 		// Let's create the instances.
 		$moufpress = InstallUtils::getOrCreateInstance('moufpress', 'Mouf\\Integration\\Wordpress\\Moufpress\\Moufpress', $moufManager);
+		
+		$jQueryLibrary = $moufManager->getInstanceDescriptor('jQueryLibrary');
+		$moufpress->getConstructorArgumentProperty('replacedWebLibrary')->setValue(array('jquery' => $jQueryLibrary));
+		
 		
 		// Let's bind instances together.
 		if (!$moufpress->getConstructorArgumentProperty('wordpressTemplate')->isValueSet()) {
@@ -96,6 +91,14 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		
 			$moufpress->getConstructorArgumentProperty("cacheService")->setValue($splashCacheApc);
 		}
+		
+		$wordpressRenderer = InstallUtils::getOrCreateInstance("wordpressRenderer", "Mouf\\Html\\Renderer\\FileBasedRenderer", $moufManager);
+		$wordpressRenderer->getProperty("directory")->setValue("vendor/mouf/integration.wordpress.moufpress/src/templates");
+		$wordpressRenderer->getProperty("cacheService")->setValue($moufManager->getInstanceDescriptor("rendererCacheService"));
+		$wordpressRenderer->getProperty("type")->setValue(ChainableRendererInterface::TYPE_TEMPLATE);
+		$wordpressRenderer->getProperty("priority")->setValue(0);
+		$wordpressTemplate->getProperty("templateRenderer")->setValue($wordpressRenderer);
+		$wordpressTemplate->getProperty("defaultRenderer")->setValue($moufManager->getInstanceDescriptor("defaultRenderer"));
 		
 		// Let's rewrite the MoufComponents.php file to save the component
 		$moufManager->rewriteMouf();
