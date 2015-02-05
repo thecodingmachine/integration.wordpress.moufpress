@@ -85,14 +85,14 @@ class Moufpress {
 		if ($this->initDone) {
 			return;
 		}
+		$this->initDone = true;
+		
 		$webLibraryNames = $this->webLibraryNames;
 		array_walk($this->replacedWebLibrary, function(WebLibraryInterface $webLibrary, $name) use ($webLibraryNames) {
 			// Let's replace all the libs declared in Wordpress with our libs instead.
 			$this->registerWordpressLib($webLibrary, $name);
 		});
-		$this->webLibraryNames = $webLibraryNames;
-	
-		$this->initDone = true;
+		$this->webLibraryNames = $webLibraryNames;	
 	}
 	
 	/**
