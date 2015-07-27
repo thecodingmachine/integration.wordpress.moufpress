@@ -229,7 +229,7 @@ class Moufpress {
 	 * @return array<array>
 	 */
 	public function getRoutesWithoutCache() {
-		$urlsList = SplashUtils::getSplashUrlManager()->getUrlsList(false);
+        $urlsList = SplashUtils::getSplashUrlManager()->getUrlsDirect();
 		
 		$items = array();
 		
