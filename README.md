@@ -51,7 +51,7 @@ You will first need to install Wordpress and Mouf side by side.
 			},
 			"require" : {
 				"mouf/mouf" : "~2.0",
-				"mouf/integration.wordpress.moufpress" : "~2.0",
+				"mouf/integration.wordpress.moufpress" : "~2.0"
 			},
 			"minimum-stability" : "dev",
 			"prefer-stable": true
