@@ -38,15 +38,15 @@ You will first need to install Wordpress and Mouf side by side.
 1. Start by installing [Wordpress](http://wordpress.org/) as you would normally do.
 2. Install the [WP-Router plugin](https://wordpress.org/plugins/wp-router/).  
    Note: even if the plugin page stats this plugin works up to version 3.4 of Wordpress,
-   we have tested with Wordpress 3.8.1 and it works great. 
+   we have tested with Wordpress 3.8.1 and 4.3.1 and it works great.
 3. [Install the Mouf PHP framework](http://mouf-php.com/packages/mouf/mouf/doc/installing_mouf.md) _in the same directory_ as Wordpress
    This means you should have the **composer.json** file of Composer in the same directory as the **wp-config.php** of Wordpress.
 4. Modify **composer.json** and add the **moufpress** module. Your **composer.json** should contain at least these lines: 
 
 		{
 			"autoload" : {
-				"psr-0" : {
-					"MyApp" : "src/"
+				"psr-4" : {
+					"MyApp\\" : "src/MyApp"
 				}
 			},
 			"require" : {

@@ -58,11 +58,11 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		
 		
 		// Let's bind instances together.
-		if (!$moufpress->getConstructorArgumentProperty('wordpressTemplate')->isValueSet()) {
+		if (!$moufpress->getConstructorArgumentProperty('wordpressTemplate')->isValueSet() || $moufpress->getConstructorArgumentProperty('wordpressTemplate')->getValue() === null) {
 			$moufpress->getConstructorArgumentProperty('wordpressTemplate')->setValue($wordpressTemplate);
 		}
 		
-		if (!$moufpress->getConstructorArgumentProperty("cacheService")->isValueSet()) {
+		if (!$moufpress->getConstructorArgumentProperty("cacheService")->isValueSet() || $moufpress->getConstructorArgumentProperty('cacheService')->getValue() === null) {
 			if (!$moufManager->instanceExists("splashCacheApc")) {
 				$splashCacheApc = $moufManager->createInstance("Mouf\\Utils\\Cache\\ApcCache");
 				$splashCacheApc->setName("splashCacheApc");
