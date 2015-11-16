@@ -1,5 +1,7 @@
 <?php
+
 use Mouf\Html\Utils\WebLibraryManager\WebLibrary;
+
 /* @var $object WebLibrary  */
 
 $moufPress = \Mouf::getMoufpress();

@@ -12,7 +12,9 @@ used by [Mouf-PHP](http://mouf-php.com) (a dependency injection based framework)
 
 MoufPress offers the following features:
 
-- **controllers**, declared through a nice graphical DI container
+- **compatible controllers**, declared through a nice graphical DI container
+- **PSR-7 compatibility**: your controllers can take into parameter `Request` objects and respond `Response` objects
+  that are compatible with the [PSR-7 HTTP Message interfaces](http://www.php-fig.org/psr/psr-7/).
 - use of **annotations** in your controllers (for instance: `@URL` to declare a new route, `@Logged` to restrict access to logged users, etc...)
 - support for any kind of **views** supported in Splash MVC (this includes plain PHP files, [Twig templates](http://twig.sensiolabs.org/), etc...)
 - a [nice web-based UI to scafold your controllers and views](http://mouf-php.com/packages/mouf/mvc.splash/doc/writing_controllers.md)
@@ -51,7 +53,7 @@ You will first need to install Wordpress and Mouf side by side.
 			},
 			"require" : {
 				"mouf/mouf" : "~2.0",
-				"mouf/integration.wordpress.moufpress" : "~2.0"
+				"mouf/integration.wordpress.moufpress" : "~3.0"
 			},
 			"minimum-stability" : "dev",
 			"prefer-stable": true
