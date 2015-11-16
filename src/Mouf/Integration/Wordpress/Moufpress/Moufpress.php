@@ -11,15 +11,14 @@ namespace Mouf\Integration\Wordpress\Moufpress;
 
 use Mouf\Mvc\Splash\Services\SplashUtils;
 use Mouf\MoufManager;
-use Mouf\Reflection\MoufReflectionClass;
+use Mouf\Mvc\Splash\Services\UrlProviderInterface;
 use Mouf\Mvc\Splash\Services\FilterUtils;
-use Mouf\Reflection\MoufReflectionMethod;
 use Mouf\Mvc\Splash\Services\SplashRequestContext;
 use Mouf\Mvc\Splash\Utils\SplashException;
 use Mouf\Utils\Cache\CacheInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Mouf\Mvc\Splash\HtmlResponse;
 use Mouf\Html\Utils\WebLibraryManager\WebLibraryInterface;
+use Zend\Diactoros\ServerRequestFactory;
 
 
 /**
@@ -56,16 +55,25 @@ class Moufpress {
 	 * @var \SplObjectStorage
 	 */
 	private $webLibraryNames;
+
+	/**
+	 * List of objects that provide routes.
+	 *
+	 * @var UrlProviderInterface[]
+	 */
+	private $routeProviders = [];
 	
 	private $initDone = false;
-	
+
 	/**
 	 *
+	 * @param UrlProviderInterface[] $routeProviders List of objects that provide routes.
 	 * @param WordpressTemplate $wordpressTemplate A pointer to the wordpressTemplate.
 	 * @param CacheInterface $cacheService The cache service that will be used to store routes.
-	 * @param array<string, WebLibraryInterface> $replacedWebLibrary A map associating the Wordpress name of a enqueued script/style with the WebLibrary that replaces it. This is useful because there are special use cases where a WebLibrary overrides an existing library managed by Wordpress.
+	 * @param array<string, WebLibraryInterface> $replacedWebLibrary
 	 */
-	public function __construct(WordpressTemplate $wordpressTemplate, CacheInterface $cacheService = null, $replacedWebLibrary = array()) {
+	public function __construct(array $routeProviders, WordpressTemplate $wordpressTemplate, CacheInterface $cacheService = null, $replacedWebLibrary = array()) {
+		$this->routeProviders = $routeProviders;
 		$this->wordpressTemplate = $wordpressTemplate;
 		$this->cacheService = $cacheService;
 	
@@ -229,7 +237,14 @@ class Moufpress {
 	 * @return array<array>
 	 */
 	public function getRoutesWithoutCache() {
-        $urlsList = SplashUtils::getSplashUrlManager()->getUrlsDirect();
+		$urlsList = array();
+
+		foreach ($this->routeProviders as $routeProvider) {
+			/* @var $routeProvider UrlProviderInterface */
+			$tmpUrlList = $routeProvider->getUrlsList(null);
+			$urlsList = array_merge($urlsList, $tmpUrlList);
+		}
+
 		
 		$items = array();
 		
@@ -314,7 +329,13 @@ class Moufpress {
 	}
 	
 	public function executeAction($instanceName, $method, $urlParameters, $parameters, $filters) {
-		$request = Request::createFromGlobals();
+		$request = ServerRequestFactory::fromGlobals(
+			$_SERVER,
+			$_GET,
+			$_POST,
+			$_COOKIE,
+			$_FILES
+		);
 		
 		$controller = MoufManager::getMoufManager()->get($instanceName);
 		

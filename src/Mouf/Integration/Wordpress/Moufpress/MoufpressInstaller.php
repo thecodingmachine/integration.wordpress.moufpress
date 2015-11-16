@@ -25,7 +25,8 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		// Let's create the instances.
 		$wordpressTemplate = InstallUtils::getOrCreateInstance('wordpressTemplate', 'Mouf\\Integration\\Wordpress\\Moufpress\\WordpressTemplate', $moufManager);
 		$content_block = InstallUtils::getOrCreateInstance('block.content', 'Mouf\\Html\\HtmlElement\\HtmlBlock', $moufManager);
-		
+		$moufExplorerUrlProvider = InstallUtils::getOrCreateInstance('moufExplorerUrlProvider', 'Mouf\\Mvc\\Splash\\Services\\MoufExplorerUrlProvider', $moufManager);
+
 		// Let's bind instances together.
 		if (!$wordpressTemplate->getSetterProperty('setContentBlock')->isValueSet()) {
 			$wordpressTemplate->getSetterProperty('setContentBlock')->setValue($content_block);
@@ -58,6 +59,10 @@ class MoufpressInstaller implements PackageInstallerInterface {
 		
 		
 		// Let's bind instances together.
+		if (!$moufpress->getConstructorArgumentProperty('routeProviders')->isValueSet() || $moufpress->getConstructorArgumentProperty('routeProviders')->getValue() === null) {
+			$moufpress->getConstructorArgumentProperty('routeProviders')->setValue([$moufExplorerUrlProvider]);
+		}
+
 		if (!$moufpress->getConstructorArgumentProperty('wordpressTemplate')->isValueSet() || $moufpress->getConstructorArgumentProperty('wordpressTemplate')->getValue() === null) {
 			$moufpress->getConstructorArgumentProperty('wordpressTemplate')->setValue($wordpressTemplate);
 		}
