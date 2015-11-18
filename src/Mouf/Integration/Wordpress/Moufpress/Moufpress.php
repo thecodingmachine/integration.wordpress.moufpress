@@ -67,6 +67,7 @@ class Moufpress
     private $routeProviders = [];
 
     private $initDone = false;
+    private static $count = 0;
 
     /**
      * @param UrlProviderInterface[]             $routeProviders     List of objects that provide routes.
